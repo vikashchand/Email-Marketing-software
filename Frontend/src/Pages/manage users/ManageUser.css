@@ -1,0 +1,87 @@
+/* ManageUserss component styles */
+.manage-users-container .tablerow {
+    border: 1px solid black;
+    padding: 0.5px;
+    width: 100%;
+  }
+  
+  .manage-users-container .emplist {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #e5e0ff;
+    width: 100%;
+  }
+  
+  .manage-users-container table {
+    border: 1px solid black;
+    width: 100%;
+  }
+  
+  /* Hide columns on small screens */
+  @media only screen and (max-width: 600px) {
+    .manage-users-container table th:nth-child(2),
+    .manage-users-container table td:nth-child(2),
+    .manage-users-container table th:nth-child(3),
+    .manage-users-container table td:nth-child(3),
+    .manage-users-container table th:nth-child(4),
+    .manage-users-container table td:nth-child(4),
+    .manage-users-container table th:nth-child(5),
+    .manage-users-container table td:nth-child(5),
+    .manage-users-container table th:nth-child(6),
+    .manage-users-container table td:nth-child(6),
+    .manage-users-container table th:nth-child(8),
+    .manage-users-container table td:nth-child(8),
+    .manage-users-container table th:nth-child(9),
+    .manage-users-container table td:nth-child(9) {
+      display: none;
+    }
+  
+    /* Adjust remaining column width */
+    .manage-users-container table th:nth-child(1),
+    .manage-users-container table td:nth-child(1),
+    .manage-users-container table th:nth-child(7),
+    .manage-users-container table td:nth-child(7),
+    .manage-users-container table th:nth-child(10),
+    .manage-users-container table td:nth-child(10) {
+      width: 10%;
+    }
+  
+    /* Style buttons */
+    .manage-users-container table button {
+      padding: 0;
+      font-size: 12px;
+    }
+  }
+  
+  /* Hide columns on medium screens */
+  @media only screen and (max-width: 1024px) {
+    .manage-users-container table th:nth-child(5),
+    .manage-users-container table td:nth-child(5),
+    .manage-users-container table th:nth-child(6),
+    .manage-users-container table td:nth-child(6),
+    .manage-users-container table th:nth-child(8),
+    .manage-users-container table td:nth-child(8),
+    .manage-users-container table th:nth-child(9),
+    .manage-users-container table td:nth-child(9) {
+      display: none;
+    }
+  
+    /* Adjust remaining column width */
+    .manage-users-container table th:nth-child(1),
+    .manage-users-container table td:nth-child(1),
+    .manage-users-container table th:nth-child(7),
+    .manage-users-container table td:nth-child(7),
+    .manage-users-container table th:nth-child(10),
+    .manage-users-container table td:nth-child(10) {
+      width: 10%;
+    }
+  
+    /* Style buttons */
+    .manage-users-container table button {
+      padding: 0;
+      font-size: 12px;
+    }
+  }
+  

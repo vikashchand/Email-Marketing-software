@@ -1,0 +1,20 @@
+.task-button {
+    background-color: #e7abab;
+    border: none;
+    color: #333;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+   
+  }
+  
+  .task-button:hover {
+    background-color: #d68989;
+  }
+  
+  .task-button:active {
+    background-color: #bbb;
+  }
+  

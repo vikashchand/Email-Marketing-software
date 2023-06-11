@@ -1,0 +1,35 @@
+.sidenav-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #25190f;
+  padding: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  height: 100vh;
+  
+ 
+}
+
+.menu {
+  background-color: #FD8A8A;
+}
+
+.sidenav-container a {
+  text-decoration: none;
+  color: black;
+  font-size: 15px;
+  background-color: #d6cefd;
+  padding: 10px; /* Added padding for top and bottom gaps */
+  border: 1px solid rgb(0, 0, 0);
+  
+}
+
+.sidenav-container a + a {
+  margin-top: 5px; /* Added margin between links */
+  border: 1px solid rgb(21, 12, 12);
+  border-radius: 2px;
+}
+
+.sidenav-container a.active-link {
+  font-weight: lighter;
+}

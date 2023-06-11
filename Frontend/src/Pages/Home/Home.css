@@ -1,0 +1,21 @@
+.home-container {
+    display: flex;
+    background-color: #E5E0FF;
+
+
+}
+  .side-nav-container {
+    flex: 0.24;
+    background-color: #ded9f3;
+    padding: 0px;
+    height: 100vh;
+    border: 2px solid rgb(0, 0, 0);
+    
+    
+  }
+  
+  .content-container {
+    flex: 3;
+    padding: 0px;
+  }
+  

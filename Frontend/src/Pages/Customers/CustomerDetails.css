@@ -1,0 +1,75 @@
+/* CustomerDetails component styles */
+.customer-details-container .custlist {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #e5e0ff;
+  width: 100%;
+}
+
+.customer-details-container .upload-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 80%;
+}
+
+.customer-details-container .custom-file-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed gray;
+  padding: 1rem;
+  cursor: pointer;
+  width: 80%;
+}
+
+.customer-details-container .upload-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.customer-details-container .tableroww {
+  border: 1px solid black;
+  padding: 0.5px;
+  width: 10%;
+  align-items: center;
+    justify-content: center;
+}
+
+.customer-details-container table {
+  border: 1px solid black;
+  width: 50%;
+}
+
+/* Hide columns on small screens */
+@media only screen and (max-width: 600px) {
+  
+  .customer-details-container table th:nth-child(1),
+  .customer-details-container table td:nth-child(1),
+  .customer-details-container table th:nth-child(3),
+  .customer-details-container table td:nth-child(3) {
+    display: none;
+  }
+
+  .customer-details-container table th:nth-child(1),
+  .customer-details-container table td:nth-child(1),
+  .customer-details-container table th:nth-child(2),
+  .customer-details-container table td:nth-child(2),
+  .customer-details-container table th:nth-child(3),
+  .customer-details-container table td:nth-child(3),
+  .customer-details-container table th:nth-child(4),
+  .customer-details-container table td:nth-child(4) {
+    width: 5%;
+  }
+
+  /* Style buttons */
+  .customer-details-container table button {
+    padding: 0;
+    font-size: 12px;
+  }
+}

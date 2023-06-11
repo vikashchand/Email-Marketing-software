@@ -1,0 +1,12 @@
+backend/.env
+Backend/node_modules
+Frontend/.env
+Frontend/node_modules
+Frontend/.pnp
+
+
+# testing
+Frontend/coverage
+
+# production
+Frontend/build

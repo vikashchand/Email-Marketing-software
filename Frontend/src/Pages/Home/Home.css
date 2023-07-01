@@ -1,21 +1,51 @@
 .home-container {
-    display: flex;
-    background-color: #E5E0FF;
-
+  display: flex;
+ 
+  
+  background-image: url("../../assets/background.png");
+  background-color: black;
+  color: white;
 
 }
-  .side-nav-container {
-    flex: 0.24;
-    background-color: #ded9f3;
-    padding: 0px;
-    height: 100vh;
-    border: 2px solid rgb(0, 0, 0);
-    
-    
-  }
+
+.content-container {
+  flex: 1;
+  width: 100%;
   
-  .content-container {
-    flex: 3;
-    padding: 0px;
-  }
   
+}
+.heading-tab {
+  background-color: #030305;
+  color: white;
+  padding: 0px;
+  text-align: center;
+position: fixed;
+  width: 100%;
+
+  
+}
+
+.heading-tab h1 {
+  font-size: 17px;
+  font-weight: bold;
+}
+
+button  {
+  background-image: linear-gradient(to right, #000000 0%, #53346D  51%, #000000  100%);
+  margin: 10px;
+  padding: 15px 45px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.6s;
+  background-size: 200% auto;
+  color: white;            
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  
+}
+
+button:hover {
+  background-position: right center; /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+}

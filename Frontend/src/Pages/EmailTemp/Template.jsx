@@ -31,7 +31,7 @@ function Template() {
 
   const saveTemplate = () => {
     // Send the updated template to the server to be saved
-    fetch(`https://email-marketing-vikash.vercel.app/template?template=${selectedTemplate}`, {
+    fetch(`http://localhost:5000/template?template=${selectedTemplate}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json', // Update the content type to JSON
@@ -52,7 +52,7 @@ function Template() {
 
   const deleteTemplate = () => {
     // Delete the template on the server
-    fetch(`https://email-marketing-vikash.vercel.app/template?template=${selectedTemplate}`, {
+    fetch(`http://localhost:5000/template?template=${selectedTemplate}`, {
       method: 'DELETE',
     })
       .then((response) => response.json())

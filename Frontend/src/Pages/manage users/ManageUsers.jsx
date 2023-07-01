@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './ManageUser.css';
+
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
   
@@ -17,13 +18,16 @@ const ManageUsers = () => {
     }
   };
 
+  
   const handleRemoveEmployee = async (employeeId) => {
-    try {
-      await axios.delete(`https://email-marketing-vikash.vercel.app/user/deleteuser/${employeeId}`);
-
-      fetchUsers();
-    } catch (error) {
-      console.error('Error removing employee:', error);
+    const confirmed = window.confirm('Are you sure you want to remove this employee?');
+    if (confirmed) {
+      try {
+        await axios.delete(`https://email-marketing-vikash.vercel.app/user/deleteuser/${employeeId}`);
+        fetchUsers();
+      } catch (error) {
+        console.error('Error removing employee:', error);
+      }
     }
   };
 
@@ -38,10 +42,15 @@ const ManageUsers = () => {
   };
 
   return (
-    <div className='manage-users-container'>
-    <div className='emplist'>
+
+    <div className="manage-users-container">
+     <div className='emplist'>
+     <br></br>
+     <br></br>
+     <h2>"Empower and Secure"</h2>
+     <p> Managing Employee Access - Directory and Permissions Control</p>
       <h2>Employee List</h2>
-      <table style={{ borderCollapse: 'collapse', border: '1px solid black' }}>
+      <table>
         <thead>
           <tr>
             <th>ID</th>
@@ -59,9 +68,9 @@ const ManageUsers = () => {
         </thead>
         <tbody>
           {users.map((user) => (
-            <tr key={user._id}>
-              <td className='tablerow'>{user.id}</td>
-              <td className='tablerow'>{user.username}</td>
+            <tr key={user.id}>
+              <td className='tablerow' >{user.id}</td>
+              <td className='tablerow' >{user.username}</td>
               <td className='tablerow'>{user.email}</td>
               <td className='tablerow'>{user.is_admin}</td>
               <td className='tablerow'>{user.is_verified}</td>
@@ -70,13 +79,13 @@ const ManageUsers = () => {
               <td className='tablerow'>{user.created_at}</td>
               <td className='tablerow'>{user.updated_at}</td>
               <td className='tablerow'>
-                <button onClick={() => handleRemoveEmployee(user._id)}>Remove</button>
+                <button onClick={() => handleRemoveEmployee(user.id)}>Remove</button>
               </td>
               <td className='tablerow'>
                 {user.account_status === 'active' ? (
-                  <button onClick={() => handleToggleAccountStatus(user._id, 'inactive')}>Set as Inactive</button>
+                  <button className='btn' onClick={() => handleToggleAccountStatus(user.id, 'inactive')}>Set as Inactive</button>
                   ) : (
-                  <button onClick={() => handleToggleAccountStatus(user._id, 'active')}>Set as Active</button>
+                  <button className='btn' onClick={() => handleToggleAccountStatus(user.id, 'active')}>Set as Active</button>
                   )}
                   </td>
                   </tr>
@@ -84,7 +93,8 @@ const ManageUsers = () => {
                   </tbody>
                   </table>
                   </div>
-                  </div>
+</div>
+
                   );
                   };
                   

@@ -1,0 +1,152 @@
+/* LandingPage.css */
+
+.landing-page {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 96vh;
+}
+
+header h1 {
+  font-size: 36px;
+}
+
+header p {
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.feature-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.feature-description {
+  flex-basis: 50%;
+  text-align: left;
+}
+
+.feature-description h2 {
+  font-size: 24px;
+}
+
+.feature-description ul {
+  list-style: none;
+  padding: 0;
+}
+
+.feature-description ul li {
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.feature-image {
+  flex-basis: 40%;
+  text-align: right;
+}
+
+.feature-image img {
+  max-width: 50%;
+  height: auto;
+  border-radius: 4px;
+}
+
+section h2 {
+  font-size: 24px;
+}
+
+section p {
+  font-size: 18px;
+  color: #f8ebeb;
+}
+
+.signup-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 12px 24px;
+  font-size: 18px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.signup-button:hover {
+  background-color: #45a049;
+}
+
+.contact-container {
+  margin-top: 100px;
+}
+
+.contact-description ul {
+  list-style: none;
+}
+
+.contact-description ul li {
+  font-size: 16px;
+  color: #ffffff;
+  padding: 2px 5px;
+}
+
+/* Adjustments for small devices */
+@media only screen and (max-width: 600px) {
+  .landing-page {
+    height: auto;
+    padding: 0px;
+  }
+
+  header h1 {
+    font-size: 28px;
+  }
+
+  header p {
+    font-size: 16px;
+  }
+
+  .feature-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .feature-description {
+    text-align: center;
+  }
+
+  .feature-image {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .feature-image img {
+    max-width: 80%;
+  }
+
+  section h2 {
+    font-size: 22px;
+  }
+
+  section p {
+    font-size: 16px;
+  }
+
+  .signup-button {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+
+  .contact-container {
+    margin-top: 60px;
+  }
+
+  .contact-description ul li {
+    font-size: 14px;
+    padding: 2px 3px;
+  }
+}

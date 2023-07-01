@@ -11,6 +11,7 @@ const jwt =require('jsonwebtoken')
 const SECURITYKEY=process.env.SECURITYKEY
 const User = require('../models/User');
 const Audit = require('../models/Audit');
+const Adminpowersaudit = require('../models/AdminPowersAudit');
 const Customer = require('../models/Customer');
 const PasswordReset = require('../models/passwordReset');
 
@@ -447,8 +448,147 @@ const resetPasswordPost = async (req, res) => {
 };
 
 
+// GET request to fetch all templates
+const fetchTemp = (req, res) => {
+  TemplateModel.find({}, (error, templates) => {
+    if (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json(templates);
+    }
+  });
+};
+
+// POST request to create a new template
+const newTemp = (req, res) => {
+  const { body, type } = req.body;
+  const email = getLoggedInUserEmail();
+
+  // Insert the audit record
+  const audit = new Adminpowersaudit({ email, type, template_name: type });
+  audit.save((error, auditResult) => {
+    if (error) {
+      console.log(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+    console.log('Executing SQL Query:', insertQuery, insertValues);
+
+    // Insert the template record
+    const template = new TemplateModel({ body, type });
+    template.save((error, templateResult) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+
+      return res.sendStatus(201);
+    });
+  });
+};
+
+// PUT request to update a template
+const updateTemp = (req, res) => {
+  const { body, type } = req.body;
+  const email = getLoggedInUserEmail();
+  const templateId = req.params.templateId;
+
+  // Insert the audit record
+  const audit = new Adminpowersaudit({ email, type: 'updating', template_name: type });
+  audit.save((error, auditResult) => {
+    if (error) {
+      console.log(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+    console.log(insertQuery, insertValues);
+
+    // Update the template record
+    TemplateModel.findByIdAndUpdate(templateId, { body }, (error, updateResult) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+
+      return res.sendStatus(201);
+    });
+  });
+};
+
+// DELETE request to delete a template
+const DeleteTemp = (req, res) => {
+  const templateId = req.params.id;
+  const { type } = req.body;
+  const email = getLoggedInUserEmail();
+
+  // Insert the audit record
+  const audit = new Adminpowersaudit({ email, type: 'Deleting', template_name: type });
+  audit.save((error, auditResult) => {
+    if (error) {
+      console.log(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+    console.log(insertQuery, insertValues);
+
+    // Delete the template record
+    TemplateModel.findByIdAndDelete(templateId, (error, deleteResult) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+
+      return res.sendStatus(201);
+    });
+  });
+};
+
+// Fetch audit logs
+const audit = (req, res) => {
+  AuditModel.find({}, (error, auditLogs) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Failed to fetch audit logs' });
+    } else {
+      res.json(auditLogs);
+    }
+  });
+};
+
+// Fetch admin powers audit logs
+const adminpowersaudit = (req, res) => {
+  AuditModel.find({}, (error, adminAuditLogs) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Failed to fetch audit logs' });
+    } else {
+      res.json(adminAuditLogs);
+    }
+  });
+};
+
+// Fetch customers
+const customers = (req, res) => {
+  CustomerModel.find({}, (error, customers) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Failed to fetch customers' });
+    } else {
+      res.json(customers);
+    }
+  });
+};
+
+
+
+
+
+
+
+
 
       module.exports = { userLogin, forgetPassword,resetPasswordPost,resetPassword,
         
         
-        userSignup, getLoggedInUserEmail ,verifyMail,deleteUser,usersList,customerList,updateUserAccountStatus,updatecustomerStatus};
+        userSignup, getLoggedInUserEmail ,verifyMail,deleteUser,usersList,customerList,updateUserAccountStatus,updatecustomerStatus
+        ,fetchTemp,newTemp,updateTemp,DeleteTemp,audit,adminpowersaudit,customers
+      
+      };

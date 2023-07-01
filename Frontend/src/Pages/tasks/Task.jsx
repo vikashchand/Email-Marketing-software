@@ -1,18 +1,19 @@
 import React from 'react';
 
 import './Task.css'; // Import the CSS file for Task component
-import Template from '../EmailTemp/Template';
+
+import ManageTemplate from '../EmailTemp/ManageTemplate';
 
 const Task = () => {
   return (
-    <div className='tas'>
+
       
       
 
-      <Template/>
+      <ManageTemplate/>
 
       
-    </div>
+ 
   );
 };
 

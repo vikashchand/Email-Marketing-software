@@ -4,10 +4,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #e5e0ff;
+
   width: 100%;
 }
 
+.button-group{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
 .customer-details-container .upload-section {
   display: flex;
   flex-direction: column;
@@ -22,7 +29,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 2px dashed gray;
+  border: 2px dashed rgb(253, 250, 250);
   padding: 1rem;
   cursor: pointer;
   width: 80%;
@@ -34,18 +41,58 @@
 }
 
 .customer-details-container .tableroww {
-  border: 1px solid black;
+  border: 1px solid rgb(255, 254, 254);
   padding: 0.5px;
   width: 10%;
   align-items: center;
     justify-content: center;
+    border-radius: 4px;
 }
 
 .customer-details-container table {
-  border: 1px solid black;
-  width: 50%;
+  border: 1px solid rgb(255, 254, 254);
+  border-radius: 4px;
+  width: 100%;
 }
 
+.fm {
+  align-items: center;
+ 
+  display: flex;
+  flex-direction: column;
+  
+}
+.customer-details-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  background-image: url("../../assets/background.png");
+    background-color: black;
+  width: 100%;
+  height: 95.7vh;
+  
+}
+
+
+
+.date-range {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 40%;
+ 
+}
+
+.date-range input {
+ 
+  background-image: url("../../assets/background.png");
+  background-color: rgb(64, 63, 65);
+  color: white;
+  width: 20%;
+  padding: 5px;
+  border-radius: 5px;
+}
 /* Hide columns on small screens */
 @media only screen and (max-width: 600px) {
   
@@ -70,6 +117,27 @@
   /* Style buttons */
   .customer-details-container table button {
     padding: 0;
+    font-size: 12px;
+  }
+
+
+  .date-range {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+   
+  }
+  .button-group{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+  }
+  .button{
+    padding: 10px;
     font-size: 12px;
   }
 }

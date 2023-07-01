@@ -4,6 +4,7 @@ const router = express.Router();
 const Customer = require('../models/Customer');
 
 router.post('/upload', async (req, res) => {
+  const email = userServices.getLoggedInUserEmail();
   const file = req.file;
   if (!file) {
     return res.status(400).json({ error: 'No file uploaded' });
@@ -25,7 +26,8 @@ router.post('/upload', async (req, res) => {
     customer_email: row[emailColumnIndex],
     customer_name: row[customerNameColumnIndex],
     template_id: row[templateIdColumnIndex],
-    status: row[statusColumnIndex]
+    status: row[statusColumnIndex],
+    email
   }));
 
   try {

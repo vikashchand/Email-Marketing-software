@@ -4,7 +4,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #E5E0FF;
+    background-image: url("../../assets/background.png");
+    background-color: black;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -27,25 +28,26 @@
     border-radius: 10px;
     overflow: hidden;
     position: absolute;
-
+    color: #fff;
     transition-duration: 0.3s;
-    background: #fff;
+    background-image: url("../../assets/background.png");
+  
   }
   .modal-title {
     margin: 0;
     font-weight: 400;
-    color: #55311c;
+    color: #ffffff;
   }
   .form-error {
     font-size: 10px;
-    color: #120101;
+    color: #f5eded;
   }
   .modal-desc {
     margin: 6px 0 30px 0;
   }
   .modal-left {
     padding: 60px 30px 20px;
-    background: #fff;
+    background-image: url("../../assets/background.png");
     flex: 1.5;
     transition-duration: 0.5s;
     opacity: 1;
@@ -66,6 +68,24 @@
     transition-duration: 1.2s;
   }
 
+
+  .heading-tab {
+    background-color: #030305;
+    color: white;
+    padding: 0px;
+    text-align: center;
+  position: fixed;
+    width: 100%;
+    z-index: 90000;
+  
+    
+  }
+  
+  .heading-tab h1 {
+    font-size: 17px;
+    font-weight: bold;
+  }
+  
   .modal.is-open .modal-left {
     transform: translateY(0);
     opacity: 1;
@@ -90,49 +110,78 @@
     color: #8c7569;
   }
 
-  .input-button {
-    padding: 1.2rem 3.2rem;
-    outline: none;
+
+            
+  .input-button  {
+    background-image: linear-gradient(to right, #000000 0%, #53346D  51%, #000000  100%);
+    margin: 10px;
+    padding: 15px 45px;
+    text-align: center;
     text-transform: uppercase;
-    border: 0;
-    color: #fff;
-    border-radius: 4px;
-    background: #905738;
-    transition: 0.3s;
-    cursor: pointer;
-   
-  }
-  .input-button:hover {
-    background: #55311c;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;            
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
   }
 
+  .input-button:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+  }
+ 
+  .button  {
+    background-image: linear-gradient(to right, #000000 0%, #53346D  51%, #000000  100%);
+    margin: 10px;
+    padding: 15px 45px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;            
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+  }
+
+  .button:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+  }
+ 
   .input-label {
     font-size: 11px;
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 800;
     letter-spacing: 0.7px;
-    color: #8c7569;
+    color: #ffffff;
     transition: 0.3s;
   }
 
   .input-block {
     display: flex;
     flex-direction: column;
-    padding: 10px 10px 8px;
-    border: 1px solid #ddd;
+    padding: 0px 0px 0px;
+ 
     border-radius: 4px;
     margin-bottom: 20px;
+    align-items: center;
     transition: 0.3s;
+    
   }
   .input-block input {
-    outline: 0;
-    border: 0;
-    padding: 4px 0 0;
+   width: 90%;
     font-size: 14px;
+    background-image: url("../../assets/background.png");
+    background-color: rgb(20, 1, 19);
+    color: white;
   }
 
   .input-block input::-moz-placeholder {
-    color: #ccc;
+    color: #ffffff;
     opacity: 1;
   }
   .input-block input:-ms-input-placeholder {
@@ -144,10 +193,10 @@
     opacity: 1;
   }
   .input-block:focus-within {
-    border-color: #8c7569;
+    border-color: #f8f6f5;
   }
   .input-block:focus-within .input-label {
-    color: rgba(140, 117, 105, 0.8);
+    color: rgba(255, 255, 255, 0.8);
   }
 
   @media (max-width: 750px) {

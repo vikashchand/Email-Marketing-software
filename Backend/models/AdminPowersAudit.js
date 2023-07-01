@@ -17,6 +17,10 @@ const AdminPowersAuditSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  email:{
+    type: String,
+    required: true,
+  }
 });
 
 const AdminPowersAudit = mongoose.models.AdminPowersAudit || mongoose.model("AdminPowersAudit", AdminPowersAuditSchema);

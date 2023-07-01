@@ -1,35 +1,84 @@
 .sidenav-container {
   display: flex;
   flex-direction: column;
-  background-color: #25190f;
+    
+  background-image: url("../assets/background.png");
+  background-color: rgb(32, 4, 33);
+  color: white;
   padding: 0px;
   margin-top: 0px;
   margin-bottom: 0px;
   height: 100vh;
-  
+  /* ... */
+}
+
+.sidenav-container.minimized {
+  width: 50px;
+}
+
+.sidenav-container.expanded  {
+  width: 100px;
  
 }
-
-.menu {
-  background-color: #FD8A8A;
+.hamburger-icon {
+  color: white;
+  font-size: 20px;
+  margin: 10px;
+  cursor: pointer;
 }
 
-.sidenav-container a {
+/* ... */
+
+
+
+
+.menu {
+  background-color: #090102;
+}
+
+.sidenav-container a{
   text-decoration: none;
-  color: black;
-  font-size: 15px;
-  background-color: #d6cefd;
-  padding: 10px; /* Added padding for top and bottom gaps */
+  width: 100%;
+  color: rgb(255, 255, 255);
+  font-size: 80%; /* Adjust the font size as needed */
+
+  background-image: linear-gradient(to right, #000000 0%, #140f19  51%, #000000  100%);
+  background-image: linear-gradient(to right, #000000 0%, #53346D  51%, #000000  100%);
+  padding: 10px;
+  padding-left: 0;
+  padding-right: 0;
   border: 1px solid rgb(0, 0, 0);
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: rgb(204, 173, 255);            
+  box-shadow: 0 0 5px #804f4f;
   
 }
 
 .sidenav-container a + a {
-  margin-top: 5px; /* Added margin between links */
-  border: 1px solid rgb(21, 12, 12);
+  margin-top: 5px;
+  border: 1px solid rgb(18, 11, 11);
   border-radius: 2px;
 }
 
+
 .sidenav-container a.active-link {
   font-weight: lighter;
+  background-color: #3017ba;
 }
+
+
+
+
+
+.sidenav-container a:hover {
+  background-position: right center; /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+}
+
+
+
+

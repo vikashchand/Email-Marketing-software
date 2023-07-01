@@ -9,7 +9,7 @@ const SendMailPage = () => {
 
   const handleSendEmail = async () => {
     try {
-      await axios.post('https://email-marketing-vikash.vercel.app/mail/send-email', {
+      await axios.post('http://localhost:5000/mail/send-email', {
         templateName,
         recipientEmail,
       });
@@ -46,8 +46,8 @@ const SendMailPage = () => {
           onChange={(e) => setRecipientEmail(e.target.value)}
         />
       </div>
-      <div className="button-section">
-        <button onClick={handleSendEmail}>Send Email</button>
+      <div className="button-section ">
+        <button className='button' onClick={handleSendEmail}>Send Email</button>
       </div>
       
     </div>

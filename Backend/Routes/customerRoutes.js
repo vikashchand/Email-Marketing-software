@@ -26,7 +26,7 @@ router.post('/upload', async (req, res) => {
   const customers = dataWithoutHeadings.map(row => ({
     customer_email: row[emailColumnIndex],
     customer_name: row[customerNameColumnIndex],
-    template_id: row[templateIdColumnIndex],
+    template_name: row[templateIdColumnIndex],
     status: row[statusColumnIndex],
     email
   }));

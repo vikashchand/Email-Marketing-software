@@ -10,7 +10,7 @@ const CustomerSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  template_id: {
+  template_name: {
     type: String,
     required: true,
   },
@@ -18,9 +18,13 @@ const CustomerSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  email: {
+  uploadedby: {
     type: String,
     required: true,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
   }
 });
 

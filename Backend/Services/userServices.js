@@ -13,6 +13,7 @@ const User = require('../models/User');
 const Audit = require('../models/Audit');
 const Adminpowersaudit = require('../models/AdminPowersAudit');
 const Customer = require('../models/Customer');
+const Template = require('../models/Template');
 const PasswordReset = require('../models/passwordReset');
 
 const fs = require('fs');
@@ -23,6 +24,9 @@ const SMTP_MAIL= process.env.SMTP_MAIL
 const SMTP_PASSWORD =process.env.SMTP_PASSWORD
 
 const nodemailer = require('nodemailer');
+const { get } = require('http');
+var loggedInUserEmail = '';
+  
 
 
 const sendWelcomeEmail = async (email) => {
@@ -80,9 +84,7 @@ const sendWelcomeEmail = async (email) => {
     }
   };
   
-  let loggedInUserEmail = '';
-  
-
+ 
   
 
 
@@ -447,139 +449,127 @@ const resetPasswordPost = async (req, res) => {
   }
 };
 
-
 // GET request to fetch all templates
-const fetchTemp = (req, res) => {
-  TemplateModel.find({}, (error, templates) => {
-    if (error) {
-      console.log(error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    } else {
-      res.json(templates);
-    }
-  });
+const fetchTemp = async (req, res) => {
+  try {
+    const templates = await Template.find({});
+    res.json(templates);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
 
 // POST request to create a new template
-const newTemp = (req, res) => {
-  const { body, type } = req.body;
-  const email = getLoggedInUserEmail();
+const newTemp = async (req, res) => {
+  try {
+    const { body, type } = req.body;
+    const email = getLoggedInUserEmail();
 
-  // Insert the audit record
-  const audit = new Adminpowersaudit({ email, type, template_name: type });
-  audit.save((error, auditResult) => {
-    if (error) {
-      console.log(error);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-    console.log('Executing SQL Query:', insertQuery, insertValues);
+    // Insert the audit record
+    const audit = new Adminpowersaudit({ email, type, template_name: type,time:Date.now()});
+    await audit.save();
+
+    console.log('Executing SQL Query:', audit);
 
     // Insert the template record
-    const template = new TemplateModel({ body, type });
-    template.save((error, templateResult) => {
-      if (error) {
-        console.log(error);
-        return res.status(500).json({ error: 'Internal Server Error' });
-      }
+    const template = new Template({ body, type });
+    await template.save();
 
-      return res.sendStatus(201);
-    });
-  });
+    res.sendStatus(201);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
 
 // PUT request to update a template
-const updateTemp = (req, res) => {
-  const { body, type } = req.body;
-  const email = getLoggedInUserEmail();
-  const templateId = req.params.templateId;
+const updateTemp = async (req, res) => {
+  try {
+    const { body, type ,templateId} = req.body;
+    const email = getLoggedInUserEmail();
+    console.log("email",email);
+   
+console.log("tempp",templateId);
+    // Insert the audit record
+    const audit = new Adminpowersaudit({ email, type: 'updating', template_name: type,time:Date.now() });
+    await audit.save();
 
-  // Insert the audit record
-  const audit = new Adminpowersaudit({ email, type: 'updating', template_name: type });
-  audit.save((error, auditResult) => {
-    if (error) {
-      console.log(error);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-    console.log(insertQuery, insertValues);
-
+    console.log('Executing SQL Query:', audit);
     // Update the template record
-    TemplateModel.findByIdAndUpdate(templateId, { body }, (error, updateResult) => {
-      if (error) {
-        console.log(error);
-        return res.status(500).json({ error: 'Internal Server Error' });
-      }
+   await  Template.findByIdAndUpdate(templateId, { body,type });
+  
+   
+    //console.log('Executing SQL Query:', template);
 
-      return res.sendStatus(201);
-    });
-  });
+    res.sendStatus(201);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
-
+console.log("logeed1user",getLoggedInUserEmail);
 // DELETE request to delete a template
-const DeleteTemp = (req, res) => {
-  const templateId = req.params.id;
-  const { type } = req.body;
-  const email = getLoggedInUserEmail();
+const DeleteTemp = async (req, res) => {
+  try {
+    console.log("logee2duser",getLoggedInUserEmail());
+    const email = getLoggedInUserEmail();
+    console.log("loge3eduser",getLoggedInUserEmail());
+    const templateId = req.params.id;
 
-  // Insert the audit record
-  const audit = new Adminpowersaudit({ email, type: 'Deleting', template_name: type });
-  audit.save((error, auditResult) => {
-    if (error) {
-      console.log(error);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-    console.log(insertQuery, insertValues);
+    const {  type } = req.body;
+console.log("tempp",type);
 
+    // Insert the audit record
+    //const audit = new Adminpowersaudit({ email, type: 'Deleting', template_name: type });
+    const audit = new Adminpowersaudit({ email, type: 'Deleting', template_name: type ,time:Date.now()});
+
+    await audit.save();
+
+    console.log('Executing SQL Query:', audit);
     // Delete the template record
-    TemplateModel.findByIdAndDelete(templateId, (error, deleteResult) => {
-      if (error) {
-        console.log(error);
-        return res.status(500).json({ error: 'Internal Server Error' });
-      }
+    await Template.findByIdAndDelete(templateId);
 
-      return res.sendStatus(201);
-    });
-  });
+    res.sendStatus(201);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
 
 // Fetch audit logs
-const audit = (req, res) => {
-  AuditModel.find({}, (error, auditLogs) => {
-    if (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Failed to fetch audit logs' });
-    } else {
-      res.json(auditLogs);
-    }
-  });
+const audit = async (req, res) => {
+  try {
+    const auditLogs = await Audit.find({});
+    res.json(auditLogs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch audit logs' });
+  }
 };
 
 // Fetch admin powers audit logs
-const adminpowersaudit = (req, res) => {
-  AuditModel.find({}, (error, adminAuditLogs) => {
-    if (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Failed to fetch audit logs' });
-    } else {
-      res.json(adminAuditLogs);
-    }
-  });
+const adminpowersaudit = async (req, res) => {
+  try {
+    const adminAuditLogs = await Adminpowersaudit.find({});
+   
+    res.json(adminAuditLogs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch admin powers audit logs' });
+  }
 };
 
 // Fetch customers
-const customers = (req, res) => {
-  CustomerModel.find({}, (error, customers) => {
-    if (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Failed to fetch customers' });
-    } else {
-      res.json(customers);
-    }
-  });
+const customers = async (req, res) => {
+  try {
+    const customers = await Customer.find({});
+    res.json(customers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch customers' });
+  }
 };
-
-
-
-
 
 
 

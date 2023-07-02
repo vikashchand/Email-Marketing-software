@@ -10,7 +10,7 @@ const Audit = () => {
 
   const fetchAuditLogs = async (tableName) => {
     try {
-      const response = await axios.get(`https://email-marketing-vikash.vercel.app/user/${tableName}`);
+      const response = await axios.get(`http://localhost:5000/user/${tableName}`);
       if (tableName === 'adminpowersaudit') {
         setAdminPowersLogs(response.data);
         setCustomersLogs([]);
@@ -44,7 +44,7 @@ const Audit = () => {
           </thead>
           <tbody>
           {adminPowersLogs.map((audi) => (
-            <tr key={`adminpowers_${audi.logid}`}>
+            <tr key={`adminpowers_${audi._id}`}>
               <td>{audi.email}</td>
               <td>{audi.type}</td>
               <td>{audi.template_name}</td>
@@ -67,7 +67,7 @@ const Audit = () => {
           </thead>
           <tbody>
             {customersLogs.map((log) => (
-              <tr key={`customers_${log.id}`}>
+              <tr key={`customers_${log._id}`}>
                 <td>{log.id}</td>
                
                 <td>{log.uploadedby}</td>
@@ -82,7 +82,7 @@ const Audit = () => {
         <table>
           <thead>
             <tr>
-              <th>ID</th>
+             
               <th>Actor</th>
               <th>Action</th>
               <th>Time</th>
@@ -91,8 +91,8 @@ const Audit = () => {
           </thead>
           <tbody>
             {auditLogs.map((keyy) => (
-              <tr key={`audit_${keyy.id}`}>
-                <td>{keyy.id}</td>
+              <tr key={`audit_${keyy._id}`}>
+               
                 <td>{keyy.actor}</td>
                 <td>{keyy.action}</td>
                 <td>{keyy.time}</td>

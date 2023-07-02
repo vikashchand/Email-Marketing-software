@@ -13,8 +13,9 @@ import Audit from '../Audit/Audit';
 const Home = () => {
   const token = localStorage.getItem('userInfo');
   let decodedToken = jwtDecode(token);
-  const role = decodedToken.data[0]?.is_admin;
-  console.log(role, 'gg');
+  console.log(decodedToken, 'decodedToken');
+  const role = decodedToken.data.is_admin;
+  console.log(role, 'ghg');
   return (
     <div>
       

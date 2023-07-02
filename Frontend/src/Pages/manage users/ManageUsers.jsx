@@ -11,7 +11,7 @@ const ManageUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('https://email-marketing-vikash.vercel.app/user/userDetails'); // Replace with your API endpoint to fetch users
+      const response = await axios.get('http://localhost:5000/user/userDetails'); // Replace with your API endpoint to fetch users
       setUsers(response.data);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -23,7 +23,7 @@ const ManageUsers = () => {
     const confirmed = window.confirm('Are you sure you want to remove this employee?');
     if (confirmed) {
       try {
-        await axios.delete(`https://email-marketing-vikash.vercel.app/user/deleteuser/${employeeId}`);
+        await axios.delete(`http://localhost:5000/user/deleteuser/${employeeId}`);
         fetchUsers();
       } catch (error) {
         console.error('Error removing employee:', error);
@@ -33,7 +33,7 @@ const ManageUsers = () => {
 
   const handleToggleAccountStatus = async (userId, newStatus) => {
     try {
-      await axios.put(`https://email-marketing-vikash.vercel.app/user/updateuser/${userId}`, { account_status: newStatus });
+      await axios.put(`http://localhost:5000/user/updateuser/${userId}`, { account_status: newStatus });
 
       fetchUsers();
     } catch (error) {
@@ -68,7 +68,7 @@ const ManageUsers = () => {
         </thead>
         <tbody>
           {users.map((user) => (
-            <tr key={user.id}>
+            <tr key={user._id}>
               <td className='tablerow' >{user.id}</td>
               <td className='tablerow' >{user.username}</td>
               <td className='tablerow'>{user.email}</td>
@@ -79,13 +79,13 @@ const ManageUsers = () => {
               <td className='tablerow'>{user.created_at}</td>
               <td className='tablerow'>{user.updated_at}</td>
               <td className='tablerow'>
-                <button onClick={() => handleRemoveEmployee(user.id)}>Remove</button>
+                <button onClick={() => handleRemoveEmployee(user._id)}>Remove</button>
               </td>
               <td className='tablerow'>
                 {user.account_status === 'active' ? (
-                  <button className='btn' onClick={() => handleToggleAccountStatus(user.id, 'inactive')}>Set as Inactive</button>
+                  <button className='btn' onClick={() => handleToggleAccountStatus(user._id, 'inactive')}>Set as Inactive</button>
                   ) : (
-                  <button className='btn' onClick={() => handleToggleAccountStatus(user.id, 'active')}>Set as Active</button>
+                  <button className='btn' onClick={() => handleToggleAccountStatus(user._id, 'active')}>Set as Active</button>
                   )}
                   </td>
                   </tr>

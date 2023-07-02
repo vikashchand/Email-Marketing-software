@@ -4,6 +4,9 @@ const nodemailer = require('nodemailer');
 const dbCon = require('../config/dbConfig');
 const dotenv = require('dotenv');
 const MailParser = require('mailparser').MailParser;
+const Template = require('../models/Template');
+const Customer = require('../models/Customer');
+
 const Imap = require('imap');
 
 dotenv.config();
@@ -69,34 +72,53 @@ const displayAllEmails = (recipientEmail, res) => {
       cb(error, []);
     });
 
-    f.once('end', () => {
+    f.once('end', async () => {
       if (failedRecipientExists) {
         console.log('Recipient email does not exist:', recipientEmail);
-
+  
         // Update the database status for the recipient email
-        dbCon.collection('customers').updateOne(
-          { customer_email: recipientEmail },
-          { $set: { status: 'Email does not exist' } },
-          (err, result) => {
-            if (err) {
-              console.error('Error updating status in the database:', err);
-            }
+        try {
+          await Customer.updateOne(
+            { customer_email: recipientEmail },
+            { $set: { status: 'Email does not exist' } }
+          );
+          console.log('Status updated successfully');
+        } catch (error) {
+          console.error('Error updating status in the database:', error);
+          if (!res.headersSent) {
+            res.status(500).json({ error: 'Error updating status in the database' });
           }
-        );
-
+          return;
+        }
+  
         if (!res.headersSent) {
           res.status(400).json({ error: 'Recipient email does not exist' });
         }
-        return;
+      } else {
+        // Update the database status for the recipient email as "Sent"
+        try {
+          await Customer.updateOne(
+            { customer_email: recipientEmail },
+            { $set: { status: 'Sent' } }
+          );
+          console.log('Status updated successfully');
+        } catch (error) {
+          console.error('Error updating status in the database:', error);
+          if (!res.headersSent) {
+            res.status(500).json({ error: 'Error updating status in the database' });
+          }
+          return;
+        }
       }
-
+  
       cb(null, allEmails);
     });
-  };
 
-  const closeConnection = () => {
+  };
+const closeConnection = () => {
     imap.end();
   };
+ 
 
   imap.once('ready', () => {
     openInbox((error) => {
@@ -120,15 +142,13 @@ const displayAllEmails = (recipientEmail, res) => {
     console.error('IMAP error:', error);
     closeConnection();
   });
-
+  
   imap.once('end', () => {
     console.log('IMAP connection ended');
   });
 
   imap.connect();
-};
-
-const sendEmail = async (req, recipientEmail, templateName, res) => {
+};const sendEmail = async (req, recipientEmail, templateName, res) => {
   try {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -146,20 +166,30 @@ const sendEmail = async (req, recipientEmail, templateName, res) => {
       },
     });
 
-    dbCon.collection('templates').findOne({ type: templateName }, async (error, template) => {
-      if (error) {
-        console.error(error);
-        if (!res.headersSent) {
-          res.status(500).json({ error: 'Error retrieving email template' });
-        }
-        return;
-      }
+    try {
+      const template = await Template.findOne({ type: templateName }).exec();
 
       if (!template) {
         console.error('Template not found');
         if (!res.headersSent) {
           res.status(404).json({ error: 'Template not found' });
         }
+        
+        // Update the database status for the recipient email
+        try {
+          await Customer.updateOne(
+            { customer_email: recipientEmail },
+            { $set: { status: 'Template not found' } }
+          );
+          console.log('Status updated successfully');
+        } catch (error) {
+          console.error('Error updating status in the database:', error);
+          if (!res.headersSent) {
+            res.status(500).json({ error: 'Error updating status in the database' });
+          }
+          return;
+        }
+        
         return;
       }
 
@@ -184,6 +214,21 @@ const sendEmail = async (req, recipientEmail, templateName, res) => {
           if (!res.headersSent) {
             res.status(400).json({ error: 'Recipient email does not exist' });
           }
+          
+          // Update the database status for the recipient email
+          try {
+            await Customer.updateOne(
+              { customer_email: recipientEmail },
+              { $set: { status: 'Recipient email does not exist' } }
+            );
+            console.log('Status updated successfully');
+          } catch (error) {
+            console.error('Error updating status in the database:', error);
+            if (!res.headersSent) {
+              res.status(500).json({ error: 'Error updating status in the database' });
+            }
+            return;
+          }
         }
       }
 
@@ -194,14 +239,51 @@ const sendEmail = async (req, recipientEmail, templateName, res) => {
         }
         transporter.close();
       });
-    });
+    } catch (error) {
+      console.error('Error retrieving email template:', error);
+      if (!res.headersSent) {
+        res.status(500).json({ error: 'Error retrieving email template' });
+      }
+      
+      // Update the database status for the recipient email
+      try {
+        await Customer.updateOne(
+          { customer_email: recipientEmail },
+          { $set: { status: 'Error retrieving email template' } }
+        );
+        console.log('Status updated successfully');
+      } catch (error) {
+        console.error('Error updating status in the database:', error);
+        if (!res.headersSent) {
+          res.status(500).json({ error: 'Error updating status in the database' });
+        }
+        return;
+      }
+    }
   } catch (error) {
     console.error('Error sending email:', error);
     if (!res.headersSent) {
       res.status(500).json({ error: 'Error sending email' });
     }
+    
+    // Update the database status for the recipient email
+    try {
+      await Customer.updateOne(
+        { customer_email: recipientEmail },
+        { $set: { status: 'Error sending email' } }
+      );
+      console.log('Status updated successfully');
+    } catch (error) {
+      console.error('Error updating status in the database:', error);
+      if (!res.headersSent) {
+        res.status(500).json({ error: 'Error updating status in the database' });
+      }
+      return;
+    }
   }
 };
+
+
 
 router.post('/send-email', async (req, res) => {
   const { recipientEmail, templateName } = req.body;

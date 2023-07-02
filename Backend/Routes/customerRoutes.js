@@ -2,11 +2,12 @@ const express = require('express');
 const XLSX = require('xlsx');
 const router = express.Router();
 const Customer = require('../models/Customer');
-const userServices=require('../Services/userServices');
 
+const userServices = require('../Services/userServices');
 router.post('/upload', async (req, res) => {
-  const email = userServices.getLoggedInUserEmail();
+  const email = userServices.getLoggedInUserEmail;
   const file = req.file;
+  
   if (!file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }

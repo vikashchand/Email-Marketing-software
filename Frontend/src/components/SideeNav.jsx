@@ -21,7 +21,7 @@ const SideeNav = () => {
  const [isNavOpen, setIsNavOpen] = useState(false);
   const token = localStorage.getItem('userInfo');
   let decodedToken = jwtDecode(token);
-  const role = decodedToken.data[0]?.is_admin;
+  const role = decodedToken.data.is_admin;
   console.log(role, 'gg');
 
 
@@ -39,11 +39,11 @@ const SideeNav = () => {
     <div className="menu">
       <FaBars className="hamburger-icon" onClick={toggleNav} />
     </div>
-    <NavLink to={'/home/LandingPage'}>
+    <NavLink to={'/home/LandingPage'} activeClassName="active-link" className="active-link">
     {isNavOpen ? 'Home' : <AiFillHome />}
       
     </NavLink>
-    <NavLink to={'/home/Customers'}>
+    <NavLink to={'/home/Customers'} activeClassName="active-link">
        
     {isNavOpen ? 'Customer Details' : <HiUserGroup/>}
 
@@ -53,17 +53,17 @@ const SideeNav = () => {
           {role ==1 && (
 
             <>
-            <NavLink to={'/home/task'}>
+            <NavLink to={'/home/task'} activeClassName="active-link">
             {isNavOpen ? 'Manage templates' : <FaEnvelope />}
             </NavLink>
-            <NavLink to="/home/employees">
+            <NavLink to="/home/employees" activeClassName="active-link">
             {isNavOpen ? 'Manage Employees' : <MdAdminPanelSettings/>}
             
             
             
             
             </NavLink>
-            <NavLink to="/home/audit">
+            <NavLink to="/home/audit" activeClassName="active-link">
             {isNavOpen ? 'Audit Logs' : <SiAdguard/>}
             
             

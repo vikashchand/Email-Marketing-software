@@ -35,7 +35,7 @@ const ResetPassword = () => {
 
   const resetPasswordHandle = () => {
     axios
-      .post('https://email-marketing-vikash.vercel.app/user/forget-Password', {
+      .post('http://localhost:5000/user/forget-Password', {
         email: values.email,
       })
       .then((response) => {

@@ -45,7 +45,7 @@ const CustomerDetails = () => {
         const customer = customers.find((user) => user.customer_email === customerEmail);
         if (customer && customer.status !== 'sent') {
           try {
-            const response = await axios.post('https://email-marketing-vikash.vercel.app/user/mail/send-email', {
+            const response = await axios.post('http://localhost:5000/mail/send-email', {
               recipientEmail: customerEmail,
               templateName: customer.template_name
             });
@@ -53,13 +53,13 @@ const CustomerDetails = () => {
             // Check the response from the backend
             if (response.status === 200) {
               // If email sent successfully, update the status to 'sent'
-              await axios.put(`https://email-marketing-vikash.vercel.app/user/updatecustomerDetails/${customerEmail}`, {
+              await axios.put(`http://localhost:5000/user/updatecustomerDetails/${customer._id}`, {
                 status: 'sent'
               });
               toast.success(`Sending mail to ${customerEmail}`); // Display success toast message
             } else if (response.status === 400 && response.data.error === 'Recipient email does not exist') {
               // If recipient email does not exist, update the status to the error message
-              await axios.put(`https://email-marketing-vikash.vercel.app/user/updatecustomerDetails/${customerEmail}`, {
+              await axios.put(`http://localhost:5000/user/updatecustomerDetails/${customer._id}`, {
                 status: response.data.error
               });
               toast.error(response.data.error); // Display error toast message
@@ -69,7 +69,7 @@ const CustomerDetails = () => {
             const errorMessage = error.response?.data?.error || 'Error sending email';
             toast.error(errorMessage); // Display error toast message
             // If an error occurred while sending email, update the status to 'error' and display the error message
-            await axios.put(`https://email-marketing-vikash.vercel.app/user/updatecustomerDetails/${customerEmail}`, { status: errorMessage });
+            await axios.put(`http://localhost:5000/user/updatecustomerDetails/${customer._id}`, { status: errorMessage });
           }
         }
       }
@@ -92,7 +92,7 @@ const CustomerDetails = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('https://email-marketing-vikash.vercel.app/user/customerDetails'); // Replace with your API endpoint to fetch users
+      const response = await axios.get('http://localhost:5000/user/customerDetails'); // Replace with your API endpoint to fetch users
       setCustomers(response.data);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -103,6 +103,23 @@ const CustomerDetails = () => {
     setSelectedFile(event.target.files[0]);
   };
 
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+
+  //   const formData = new FormData();
+  //   formData.append('file', selectedFile);
+
+  //   axios
+  //     .post('http://localhost:5000/upload', formData)
+  //     .then((response) => {
+  //       console.log(response.data);
+  //       toast.success(response.data.message); // Use response.data.message for success
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //       toast.error(error.response.data.error); // Use error.response.data.error for error
+  //     });
+  // };
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -110,7 +127,7 @@ const CustomerDetails = () => {
     formData.append('file', selectedFile);
 
     axios
-      .post('https://email-marketing-vikash.vercel.app/upload', formData)
+      .post('http://localhost:5000/upload', formData)
       .then((response) => {
         console.log(response.data);
         toast.success(response.data.message); // Use response.data.message for success
@@ -120,10 +137,9 @@ const CustomerDetails = () => {
         toast.error(error.response.data.error); // Use error.response.data.error for error
       });
   };
-
   const generateReport = async () => {
     try {
-      const response = await axios.get('https://email-marketing-vikash.vercel.app/generateReport', {
+      const response = await axios.get('http://localhost:5000/generateReport', {
         params: {
           startDate,
           endDate

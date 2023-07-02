@@ -10,6 +10,7 @@ const ManageTemplate = () => {
   const [newTemplateType, setNewTemplateType] = useState('');
   const [isCreatingTemplate, setIsCreatingTemplate] = useState(false);
   const [previewTemplate, setPreviewTemplate] = useState(null);
+  const [newTemplateName, setNewTemplateName] = useState('');
 
   useEffect(() => {
     // Fetch the templates from the backend when the component mounts
@@ -18,7 +19,7 @@ const ManageTemplate = () => {
 
   const fetchTemplates = () => {
     // Make a GET request to fetch the templates from the backend
-    fetch('https://email-marketing-vikash.vercel.app/user/templates')
+    fetch('http://localhost:5000/user/templates')
       .then(response => response.json())
       .then(data => setTemplates(data))
       .catch(error => console.log(error));
@@ -28,7 +29,9 @@ const ManageTemplate = () => {
     setCurrentTemplate(template);
     setIsCreatingTemplate(false);
     setPreviewTemplate(null);
+    setNewTemplateName(template.type);
   };
+  
 
   // const handleDelete = templateId => {
   //   const confirmed = window.confirm('Are you sure you want to remove this Template?');
@@ -50,17 +53,23 @@ const ManageTemplate = () => {
     const confirmed = window.confirm('Are you sure you want to remove this Template?');
     if (confirmed) {
       try {
+        
         // Get the template type based on the templateId
-        const template = templates.find(template => template.id === templateId);
-        const templateType = template ? template.Type : '';
-  
+        const template = templates.find(template => template._id === templateId);
+       // const templateType = template ? template.Type : '';
+       console.log("hi",template.type);
         // Make a DELETE request to the backend to delete the template
-        fetch(`https://email-marketing-vikash.vercel.app/user/templates/${templateId}`, {
+        fetch(`http://localhost:5000/user/templates/${templateId}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ type: templateType }), // Send the template type in the request body
+          body: JSON.stringify({
+            
+            type: template.type , 
+            // Use the updated template name
+          }), // Send the template type as a string in the request body
+           // Send the template type in the request body
         })
           .then(() => {
             fetchTemplates();
@@ -91,12 +100,16 @@ const ManageTemplate = () => {
   const handleUpdate = () => {
     if (currentTemplate) {
       // Make a PUT request to update the existing template
-      fetch(`https://email-marketing-vikash.vercel.app/user/templates/${currentTemplate.id}`, {
+      fetch(`http://localhost:5000/user/templates/${currentTemplate._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ body: currentTemplate.body,type: currentTemplate.Type  }),
+        body: JSON.stringify({
+          body: currentTemplate.body,
+          type: newTemplateName, 
+          templateId:currentTemplate._id// Use the updated template name
+        }),
       })
         .then(() => {
           setCurrentTemplate(null);
@@ -107,16 +120,21 @@ const ManageTemplate = () => {
     } else {
       if (newTemplate && newTemplateType) {
         // Make a POST request to create a new template
-        fetch('https://email-marketing-vikash.vercel.app/user/templates', {
+        fetch('http://localhost:5000/user/templates', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ body: newTemplate, type: newTemplateType }),
+          body: JSON.stringify({
+            body: newTemplate,
+            type: newTemplateType,
+            name: newTemplateName, // Include the new template name in the request body
+          }),
         })
           .then(() => {
             setNewTemplate('');
             setNewTemplateType('');
+            setNewTemplateName('');
             setIsCreatingTemplate(false);
             setPreviewTemplate(null);
             fetchTemplates();
@@ -124,10 +142,11 @@ const ManageTemplate = () => {
           })
           .catch(error => console.log(error));
       } else {
-        console.log('Please enter both template body and type');
+        console.log('Please enter the template body, type, and name');
       }
     }
   };
+  
 
   const handlePreview = template => {
     setPreviewTemplate(template);
@@ -174,13 +193,13 @@ theme="dark"
             </thead>
             <tbody>
               {templates.map(template => (
-                <tr key={template.id}>
-                  <td className='tableroww'>{template.Type}</td>
+                <tr key={template._id}>
+                  <td className='tableroww'>{template.type}</td>
                   <td className='tableroww'>
                     <button onClick={() => handleEdit(template)}>Edit</button>
                   </td>
                   <td className='tableroww'>
-                    <button onClick={() => handleDelete(template.id)}>Delete</button>
+                    <button onClick={() => handleDelete(template._id)}>Delete</button>
                   </td>
                   <td  className='tableroww'>
                     <button onClick={() => handlePreview(template)}>View</button>
@@ -195,23 +214,29 @@ theme="dark"
       )}
 
       {currentTemplate && (
-        <div className="template-editor ">
-        <br></br>
-        <br></br>
-        <br></br>
+        <div className="template-editor">
+          <br></br>
+          <br></br>
+          <br></br>
           <h3>Edit Template</h3>
-          <textarea 
+          <input
+            type="text"
+            value={newTemplateName}
+            onChange={e => setNewTemplateName(e.target.value)}
+            style={{ width: '50%', height: '30px', marginBottom: '10px' }}
+          />
+          <textarea
             value={currentTemplate.body}
-            onChange={e => setCurrentTemplate({ ...currentTemplate, body: e.target.value })}
+            onChange={e => setCurrentTemplate({ ...currentTemplate, body: e.target.value ,_id: currentTemplate._id })}
             style={{ width: '50%', height: '200px' }}
           ></textarea>
-            <div className="templateedits">
-          <button onClick={handleUpdate}>Save</button>
-          <button onClick={handleTemplateClose}>Close</button>
+          <div className="templateedits">
+            <button onClick={handleUpdate}>Save</button>
+            <button onClick={handleTemplateClose}>Close</button>
           </div>
         </div>
       )}
-
+      
       {isCreatingTemplate && (
         <div className="templateeditor">
           <h3>Create New Template</h3>

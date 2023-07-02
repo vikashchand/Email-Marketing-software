@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const AdminPowersAuditSchema = new mongoose.Schema({
   email: {
     type: String,
-    required: true,
+    required: false,
   },
   type: {
     type: String,
@@ -14,13 +14,10 @@ const AdminPowersAuditSchema = new mongoose.Schema({
     required: true,
   },
   time: {
-    type: Date,
-    required: true,
+    type: Date
+   
   },
-  email:{
-    type: String,
-    required: true,
-  }
+  
 });
 
 const AdminPowersAudit = mongoose.models.AdminPowersAudit || mongoose.model("AdminPowersAudit", AdminPowersAuditSchema);

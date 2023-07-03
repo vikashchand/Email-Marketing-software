@@ -41,7 +41,7 @@ router.get('/', async (req, res) => {
   const { template } = req.query;
   const templatePath = path.join(templatesPath, `${template}.html`);
   const email = userServices.getLoggedInUserEmail(); // Replace with your appropriate method to get the user's email
-
+console.log(templatePath);
   try {
     const data = await fs.promises.readFile(templatePath, 'utf8');
     res.json({ template: data });

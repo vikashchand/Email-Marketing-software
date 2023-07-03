@@ -348,6 +348,95 @@ const updatecustomerStatus = async (req, res) => {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+// const forgetPassword = async (req, res) => {
+//   try {
+//     const email = req.body.email;
+//     const user = await User.findOne({ email });
+
+//     if (user) {
+//       const mailSubject = 'Forget Password';
+//       const randomToken = randomstring.generate();
+//       const content = `<p>Hi ${user.username}</p><p>Please click on the link to reset your password:</p><a href="https://email-marketing-vikash.vercel.app/forget-Password?token=${randomToken}">Click here</a>`;
+//      await  sendDMail(email, mailSubject, content);
+
+//       await PasswordReset.deleteOne({ email });
+//       await PasswordReset.create({ email, token: randomToken });
+
+//       return res.status(200).json({ status: 200, message: 'Reset email has been sent to your email address' });
+//     }
+
+//     return res.status(404).json({ status: 404, message: 'Email not found' });
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(500).json({ status: 500, message: 'Internal server error' });
+//   }
+// };
+
+ 
+
+// const resetPassword = async (req, res) => {
+//   try {
+//     const token = req.query.token;
+//     if (token === undefined) {
+//       res.render('404.ejs');
+//       return;
+//     }
+
+//     const passwordReset = await PasswordReset.findOne({ token });
+
+//     if (passwordReset) {
+//       const user = await User.findOne({ email: passwordReset.email });
+
+//       if (user) {
+//         res.render('reset-password.ejs', { user });
+//         return;
+//       }
+//     }
+
+//     res.render('404.ejs');
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// };
+
+// const resetPasswordPost = async (req, res) => {
+//   try {
+//     const updatedTime = new Date().toISOString("en-US", { timeZone: "Asia/Kolkata" });
+//     if (req.body.password !== req.body.confirm_password) {
+//       res.render('reset-password.ejs', { error_message: 'Password does not match', user: { id: req.body.user_id, email: req.body.email } });
+//       return;
+//     }
+
+//     const user = await User.findById(req.body.user_id);
+
+//     if (user) {
+//       bcrypt.hash(req.body.confirm_password, 10, async (err, hash) => {
+//         if (err) {
+//           console.log(err);
+//           return;
+//         }
+
+//         await PasswordReset.deleteOne({ email: req.body.email });
+//         user.password = hash;
+//         user.updated_at = updatedTime;
+//         await user.save();
+
+//         res.render('message', {
+//           message: 'Your password has been changed successfully',
+//           loginLink: 'https://email-marketing-software.vercel.app/login'
+//         });
+//       });
+//     } else {
+//       res.render('404');
+//     }
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// };
+
+////////////////////////////////jai jaiii
+
+
 const forgetPassword = async (req, res) => {
   try {
     const email = req.body.email;
@@ -357,7 +446,7 @@ const forgetPassword = async (req, res) => {
       const mailSubject = 'Forget Password';
       const randomToken = randomstring.generate();
       const content = `<p>Hi ${user.username}</p><p>Please click on the link to reset your password:</p><a href="https://email-marketing-vikash.vercel.app/forget-Password?token=${randomToken}">Click here</a>`;
-     await  sendDMail(email, mailSubject, content);
+      await sendDMail(email, mailSubject, content);
 
       await PasswordReset.deleteOne({ email });
       await PasswordReset.create({ email, token: randomToken });
@@ -372,13 +461,11 @@ const forgetPassword = async (req, res) => {
   }
 };
 
- 
-
 const resetPassword = async (req, res) => {
   try {
     const token = req.query.token;
     if (token === undefined) {
-      res.render('404.ejs');
+      res.status(404).send('404 - Not Found');
       return;
     }
 
@@ -388,12 +475,31 @@ const resetPassword = async (req, res) => {
       const user = await User.findOne({ email: passwordReset.email });
 
       if (user) {
-        res.render('reset-password.ejs', { user });
+        // Render the reset-password HTML directly
+        const html = `
+          <html>
+            <head>
+              <title>Reset Password</title>
+            </head>
+            <body>
+              <form method="post" action="/forget-Password">
+                <input type="hidden" name="user_id" value="${user.id}">
+                <input type="hidden" name="email" value="${user.email}">
+                <label for="password">New Password:</label>
+                <input type="password" name="password" required>
+                <label for="confirm_password">Confirm Password:</label>
+                <input type="password" name="confirm_password" required>
+                <button type="submit">Reset Password</button>
+              </form>
+            </body>
+          </html>
+        `;
+        res.send(html);
         return;
       }
     }
 
-    res.render('404.ejs');
+    res.status(404).send('404 - Not Found');
   } catch (error) {
     console.log(error.message);
   }
@@ -403,7 +509,19 @@ const resetPasswordPost = async (req, res) => {
   try {
     const updatedTime = new Date().toISOString("en-US", { timeZone: "Asia/Kolkata" });
     if (req.body.password !== req.body.confirm_password) {
-      res.render('reset-password', { error_message: 'Password does not match', user: { id: req.body.user_id, email: req.body.email } });
+      // Render the error message directly
+      const errorHTML = `
+        <html>
+          <head>
+            <title>Password Error</title>
+          </head>
+          <body>
+            <p>Password does not match</p>
+            <a href="/forget-Password?token=${req.body.token}">Go back</a>
+          </body>
+        </html>
+      `;
+      res.send(errorHTML);
       return;
     }
 
@@ -421,18 +539,32 @@ const resetPasswordPost = async (req, res) => {
         user.updated_at = updatedTime;
         await user.save();
 
-        res.render('message', {
-          message: 'Your password has been changed successfully',
-          loginLink: 'https://email-marketing-software.vercel.app/login'
-        });
+        // Render the success message directly
+        const successHTML = `
+          <html>
+            <head>
+              <title>Password Changed</title>
+            </head>
+            <body>
+              <p>Your password has been changed successfully</p>
+              <a href="https://email-marketing-software.vercel.app/login">Login</a>
+            </body>
+          </html>
+        `;
+        res.send(successHTML);
       });
     } else {
-      res.render('404');
+      res.status(404).send('404 - Not Found');
     }
   } catch (error) {
     console.log(error.message);
   }
 };
+
+
+
+
+
 
 // GET request to fetch all templates
 const fetchTemp = async (req, res) => {

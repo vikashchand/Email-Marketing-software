@@ -21,14 +21,15 @@ const mailRoutes = require('./Routes/mailRoutes');
 
 
 // Use your routes
+
 const corsOptions = {
    origin: 'https://email-marketing-software.vercel.app',
    credentials: true,
    optionSuccessStatus: 200,
-};
-app.use(cors(corsOptions));
+ };
+ app.use(cors(corsOptions));
 
- 
+
 
 
 app.use(bodyParser.json())

@@ -137,7 +137,7 @@ const sendWelcomeEmail = async (email) => {
           loggedInUserEmail = data2.email;
   
           console.log(data2.is_admin);
-          console.log('Logged in user email:', loggedInUserEmail);
+          console.log('Logged in user inside first email:', loggedInUserEmail);
   
           await auditLog(data2.email, 'login');
         
@@ -227,10 +227,10 @@ const sendWelcomeEmail = async (email) => {
   
   
 
-      const getLoggedInUserEmail = () => {
+       const  getLoggedInUserEmail = () => {
         return loggedInUserEmail;
       };
-
+console.log('Logged in user outside email:', loggedInUserEmail);
 
       // const verifyMail = async (req, res) => {
       //   const token = req.query.token;
@@ -857,9 +857,9 @@ console.log("tempp",templateId);
 // DELETE request to delete a template
 const DeleteTemp = async (req, res) => {
   try {
-    console.log("logee2duser",getLoggedInUserEmail());
+    console.log("logee2duser",loggedInUserEmail);
     const email = getLoggedInUserEmail();
-    console.log("loge3eduser",getLoggedInUserEmail());
+    console.log("loge3eduser",loggedInUserEmail);
     const templateId = req.params.id;
 
     const {  type } = req.body;

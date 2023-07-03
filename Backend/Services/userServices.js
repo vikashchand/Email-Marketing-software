@@ -378,7 +378,7 @@ const resetPassword = async (req, res) => {
   try {
     const token = req.query.token;
     if (token === undefined) {
-      res.render('404');
+      res.render('404.ejs');
       return;
     }
 
@@ -388,12 +388,12 @@ const resetPassword = async (req, res) => {
       const user = await User.findOne({ email: passwordReset.email });
 
       if (user) {
-        res.render('reset-password', { user });
+        res.render('reset-password.ejs', { user });
         return;
       }
     }
 
-    res.render('404');
+    res.render('404.ejs');
   } catch (error) {
     console.log(error.message);
   }

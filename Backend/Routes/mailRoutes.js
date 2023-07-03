@@ -148,7 +148,7 @@ const closeConnection = () => {
   });
 
   imap.connect();
-};const sendEmail = async (req, recipientEmail, templateName, res) => {
+};const sendingEmail = async (req, recipientEmail, templateName, res) => {
   try {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -289,7 +289,7 @@ router.post('/send-email', async (req, res) => {
   const { recipientEmail, templateName } = req.body;
 
   try {
-    await sendEmail(req, recipientEmail, templateName, res);
+    await sendingEmail(req, recipientEmail, templateName, res);
 
     // Delay execution of displayAllEmails by 5 seconds
     setTimeout(() => {

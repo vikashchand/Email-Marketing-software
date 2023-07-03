@@ -133,14 +133,14 @@ const sendWelcomeEmail = async (email) => {
             token: auth,
             email: data2.email,
           });
-  
+          await sendWelcomeEmail(data2.email);
           loggedInUserEmail = data2.email;
   
           console.log(data2.is_admin);
           console.log('Logged in user email:', loggedInUserEmail);
   
           await auditLog(data2.email, 'login');
-          await sendWelcomeEmail(data2.email);
+        
         } else {
           res.json({
             status: 400,
@@ -204,7 +204,7 @@ const sendWelcomeEmail = async (email) => {
       const mailSubject = 'Mail verification';
       const randomToken = randomstring.generate();
       const content = `<p>Hi ${req.body.username},</p><p>Please click on the link to verify your email:</p><a href="https://email-marketing-vikash.vercel.app/mail-verification?token=${randomToken}">Click here</a>`;
-      sendDMail(req.body.email, mailSubject, content);
+      await sendDMail(req.body.email, mailSubject, content);
   
       // Update user token in the database
       await User.updateOne({ email: req.body.email }, { token: randomToken });
@@ -357,7 +357,7 @@ const forgetPassword = async (req, res) => {
       const mailSubject = 'Forget Password';
       const randomToken = randomstring.generate();
       const content = `<p>Hi ${user.username}</p><p>Please click on the link to reset your password:</p><a href="https://email-marketing-vikash.vercel.app/forget-Password?token=${randomToken}">Click here</a>`;
-      sendDMail(email, mailSubject, content);
+     await  sendDMail(email, mailSubject, content);
 
       await PasswordReset.deleteOne({ email });
       await PasswordReset.create({ email, token: randomToken });

@@ -25,7 +25,7 @@ const SMTP_PASSWORD =process.env.SMTP_PASSWORD
 
 const nodemailer = require('nodemailer');
 const { get } = require('http');
-var loggedInUserEmail = '';
+let loggedInUserEmail = '';
   
 
 
@@ -812,7 +812,7 @@ const newTemp = async (req, res) => {
     const email = getLoggedInUserEmail();
 
     // Insert the audit record
-    const audit = new Adminpowersaudit({ email, type, template_name: type,time:Date.now()});
+    const audit = new Adminpowersaudit({ email, type:"creating", template_name: type,time:Date.now()});
     await audit.save();
 
     console.log('Executing SQL Query:', audit);

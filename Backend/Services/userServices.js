@@ -524,7 +524,7 @@ const resetPasswordPost = async (req, res) => {
       res.send(errorHTML);
       return;
     }
-    const userId = mongoose.Types.ObjectId(req.body.user_id); // Parse user_id as ObjectId
+    const userId = new mongoose.Types.ObjectId(req.body.user_id); // Parse user_id as ObjectId
 
     const user = await User.findById(userId); 
 

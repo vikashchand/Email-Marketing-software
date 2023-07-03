@@ -524,8 +524,9 @@ const resetPasswordPost = async (req, res) => {
       res.send(errorHTML);
       return;
     }
+    const userId = mongoose.Types.ObjectId(req.body.user_id); // Parse user_id as ObjectId
 
-    const user = await User.findById(req.body.user_id);
+    const user = await User.findById(userId); 
 
     if (user) {
       bcrypt.hash(req.body.confirm_password, 10, async (err, hash) => {

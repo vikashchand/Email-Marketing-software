@@ -61,7 +61,7 @@ const Login = () => {
         <div className="modal">
           <div className="modal-container">
             <div className="modal-left">
-              <h1 className="modal-title">jai rfrfr Back!</h1>
+              <h1 className="modal-title">welcome ji!</h1>
               <p className="modal-desc">
                  project - Login to your account
               </p>

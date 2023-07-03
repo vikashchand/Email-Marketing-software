@@ -483,7 +483,7 @@ const resetPassword = async (req, res) => {
             </head>
             <body>
               <form method="post" action="/forget-Password">
-                <input type="hidden" name="user_id" value="${user.id}">
+                <input type="hidden" name="user_id" value="${user._id}">
                 <input type="hidden" name="email" value="${user.email}">
                 <label for="password">New Password:</label>
                 <input type="password" name="password" required>
@@ -524,9 +524,8 @@ const resetPasswordPost = async (req, res) => {
       res.send(errorHTML);
       return;
     }
-    const userId = new mongoose.Types.ObjectId(req.body.user_id); // Parse user_id as ObjectId
 
-    const user = await User.findById(userId); 
+    const user = await User.findById(req.body.user_id);
 
     if (user) {
       bcrypt.hash(req.body.confirm_password, 10, async (err, hash) => {
@@ -548,7 +547,7 @@ const resetPasswordPost = async (req, res) => {
             </head>
             <body>
               <p>Your password has been changed successfully</p>
-              <a href="https://email-marketing-software.vercel.app/login">Login</a>
+              <a href="https://example.com/login">Login</a>
             </body>
           </html>
         `;
@@ -561,12 +560,6 @@ const resetPasswordPost = async (req, res) => {
     console.log(error.message);
   }
 };
-
-
-
-
-
-
 // GET request to fetch all templates
 const fetchTemp = async (req, res) => {
   try {

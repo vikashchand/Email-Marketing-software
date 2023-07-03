@@ -10,7 +10,7 @@ const Audit = () => {
 
   const fetchAuditLogs = async (tableName) => {
     try {
-      const response = await axios.get(`http://localhost:5000/user/${tableName}`);
+      const response = await axios.get(`https://email-marketing-vikash.vercel.app/user/${tableName}`);
       if (tableName === 'adminpowersaudit') {
         setAdminPowersLogs(response.data);
         setCustomersLogs([]);

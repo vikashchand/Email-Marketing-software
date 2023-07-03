@@ -89,8 +89,6 @@ const sendWelcomeEmail = async (email) => {
 
 
 
-
-
   const userLogin = async (req, res) => {
     const { identifier, password } = req.body;
   
@@ -116,14 +114,12 @@ const sendWelcomeEmail = async (email) => {
         console.log('Hashed Password from DB:', hashedPassword);
         const isAdmin = user.is_admin;
         const query = { is_admin: { $eq: isAdmin } };
-        console.log('isAdmin:jjjjj', isAdmin);
-
-        
+        console.log('isAdmin:', isAdmin);
+  
         const isMatch = await bcrypt.compare(password.trim(), hashedPassword);
   
         if (isMatch) {
           // Fetch additional user data if needed
-         
           const data2 = user.toJSON(); // Convert user object to JSON or extract required fields
   
           const auth = jwt.sign({ data: data2 }, SECURITYKEY);
@@ -137,12 +133,10 @@ const sendWelcomeEmail = async (email) => {
             token: auth,
             email: data2.email,
           });
-  console.log(auth,"token")
-
+  
           loggedInUserEmail = data2.email;
-
+  
           console.log(data2.is_admin);
-
           console.log('Logged in user email:', loggedInUserEmail);
   
           await auditLog(data2.email, 'login');
@@ -167,15 +161,6 @@ const sendWelcomeEmail = async (email) => {
     }
   };
   
-
-  
-
-
-
-
-
-
-
 
 
 
@@ -218,7 +203,7 @@ const sendWelcomeEmail = async (email) => {
       // Send verification mail
       const mailSubject = 'Mail verification';
       const randomToken = randomstring.generate();
-      const content = `<p>Hi ${req.body.username},</p><p>Please click on the link to verify your email:</p><a href="https://email-marketing-software.vercel.app/mail-verification?token=${randomToken}">Click here</a>`;
+      const content = `<p>Hi ${req.body.username},</p><p>Please click on the link to verify your email:</p><a href="https://email-marketing-vikash.vercel.app/mail-verification?token=${randomToken}">Click here</a>`;
       sendDMail(req.body.email, mailSubject, content);
   
       // Update user token in the database
@@ -371,7 +356,7 @@ const forgetPassword = async (req, res) => {
     if (user) {
       const mailSubject = 'Forget Password';
       const randomToken = randomstring.generate();
-      const content = `<p>Hi ${user.username}</p><p>Please click on the link to reset your password:</p><a href="https://email-marketing-software.vercel.app/forget-Password?token=${randomToken}">Click here</a>`;
+      const content = `<p>Hi ${user.username}</p><p>Please click on the link to reset your password:</p><a href="https://email-marketing-vikash.vercel.app/forget-Password?token=${randomToken}">Click here</a>`;
       sendDMail(email, mailSubject, content);
 
       await PasswordReset.deleteOne({ email });
@@ -508,7 +493,7 @@ console.log("tempp",templateId);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-console.log("logeed1user",getLoggedInUserEmail);
+
 // DELETE request to delete a template
 const DeleteTemp = async (req, res) => {
   try {

@@ -34,7 +34,7 @@ const Login = () => {
 
   const loginHandle = () => {
     axios
-      .post('http://localhost:5000/user/login',{
+      .post('https://email-marketing-vikash.vercel.app/user/login',{
         identifier: values.identifier,  // Add the identifier value here
   password: values.password
       })

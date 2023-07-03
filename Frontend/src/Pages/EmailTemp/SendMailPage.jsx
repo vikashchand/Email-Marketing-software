@@ -9,7 +9,7 @@ const SendMailPage = () => {
 
   const handleSendEmail = async () => {
     try {
-      await axios.post('http://localhost:5000/mail/send-email', {
+      await axios.post('https://email-marketing-vikash.vercel.app/mail/send-email', {
         templateName,
         recipientEmail,
       });

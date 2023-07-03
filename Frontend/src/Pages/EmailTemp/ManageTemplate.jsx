@@ -19,7 +19,7 @@ const ManageTemplate = () => {
 
   const fetchTemplates = () => {
     // Make a GET request to fetch the templates from the backend
-    fetch('http://localhost:5000/user/templates')
+    fetch('https://email-marketing-vikash.vercel.app/user/templates')
       .then(response => response.json())
       .then(data => setTemplates(data))
       .catch(error => console.log(error));
@@ -59,7 +59,7 @@ const ManageTemplate = () => {
        // const templateType = template ? template.Type : '';
        console.log("hi",template.type);
         // Make a DELETE request to the backend to delete the template
-        fetch(`http://localhost:5000/user/templates/${templateId}`, {
+        fetch(`https://email-marketing-vikash.vercel.app/user/templates/${templateId}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -100,7 +100,7 @@ const ManageTemplate = () => {
   const handleUpdate = () => {
     if (currentTemplate) {
       // Make a PUT request to update the existing template
-      fetch(`http://localhost:5000/user/templates/${currentTemplate._id}`, {
+      fetch(`https://email-marketing-vikash.vercel.app/user/templates/${currentTemplate._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -120,7 +120,7 @@ const ManageTemplate = () => {
     } else {
       if (newTemplate && newTemplateType) {
         // Make a POST request to create a new template
-        fetch('http://localhost:5000/user/templates', {
+        fetch('https://email-marketing-vikash.vercel.app/user/templates', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -28,7 +28,7 @@ const Registration = () => {
  
 
   const signupHandle =()=>{
-    axios.post('http://localhost:5000/user/register',{
+    axios.post('https://email-marketing-vikash.vercel.app/user/register',{
       username:values.username,email:values.email,password:values.password
     }).then((data)=>{
       if(data.data.status===200){

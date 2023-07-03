@@ -2,7 +2,7 @@ backend/.env
 Backend/node_modules
 Frontend/.env
 Frontend/node_modules
-Frontend/
+Frontend/src
 
 
 # testing

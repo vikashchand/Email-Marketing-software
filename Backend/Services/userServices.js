@@ -700,8 +700,9 @@ const resetPassword = async (req, res) => {
                       </p>
                       
                       <form  method="POST" action="/forget-Password">
-                        <input type="hidden" name="user_id" value="<%= user._id %>">
-                        <input type="hidden" name="email" value="<%= user.email %>">
+                        
+                        <input type="hidden" name="user_id" value="${user._id}">
+                        <input type="hidden" name="email" value="${user.email}">
                         <div class="input-block">
                           <label for="password" class="input-label">Password</label>
                           <input type="password" name="password" id="password" placeholder="Password" required>

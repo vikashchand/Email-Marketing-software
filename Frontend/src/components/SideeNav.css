@@ -79,17 +79,19 @@
   text-decoration: none;
 }
 
-.sidenav-container.small-screen {
-  width: 50px; /* Set the width to the minimized width on small screens */
-}
 
-@media screen and (max-width: 768px) {
-  /* Adjust the max-width value as per your requirements */
-  .sidenav-container.expanded {
-    width: 50px; /* Set the width to the minimized width on small screens */
+
+
+@media (max-width: 768px) {
+  .sidenav-container {
+    width: 50px;
   }
 
-  .sidenav-container a {
-    padding: 10px 20px; /* Adjust the padding as needed for the expanded state */
+  .sidenav-container.minimized {
+    display: none;
+  }
+
+  .sidenav-container.expanded {
+    display: none;
   }
 }

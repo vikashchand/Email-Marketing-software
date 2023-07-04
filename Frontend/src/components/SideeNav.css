@@ -83,11 +83,9 @@
 
 
 @media (max-width: 768px) {
-  .sidenav-container {
-    width: 50px;
-  }
+  
 
-  .sidenav-container.minimized {
+  .hamburger-icon {
     display: none;
   }
 

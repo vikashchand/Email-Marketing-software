@@ -25,8 +25,8 @@ const SMTP_PASSWORD =process.env.SMTP_PASSWORD
 
 const nodemailer = require('nodemailer');
 const { get } = require('http');
-let loggedInUserEmail = '';
-  
+let loggedInUserEmail;
+
 
 
 const sendWelcomeEmail = async (email) => {
@@ -126,6 +126,9 @@ const sendWelcomeEmail = async (email) => {
   
           user.last_login = new Date();
           await user.save();
+          await sendWelcomeEmail(data2.email);
+          loggedInUserEmail = data2.email;
+  
   
           res.json({
             status: 200,
@@ -133,9 +136,7 @@ const sendWelcomeEmail = async (email) => {
             token: auth,
             email: data2.email,
           });
-          await sendWelcomeEmail(data2.email);
-          loggedInUserEmail = data2.email;
-  
+          
           console.log(data2.is_admin);
           console.log('Logged in user inside first email:', loggedInUserEmail);
   
@@ -810,7 +811,7 @@ const fetchTemp = async (req, res) => {
 const newTemp = async (req, res) => {
   try {
     const { body, type } = req.body;
-    const email = getLoggedInUserEmail();
+    const email = loggedInUserEmail;
 
     // Insert the audit record
     const audit = new Adminpowersaudit({ email, type:"creating", template_name: type,time:Date.now()});
@@ -833,7 +834,7 @@ const newTemp = async (req, res) => {
 const updateTemp = async (req, res) => {
   try {
     const { body, type ,templateId} = req.body;
-    const email = getLoggedInUserEmail();
+    const email = loggedInUserEmail;
     console.log("email",email);
    
 console.log("tempp",templateId);
@@ -859,7 +860,7 @@ console.log("tempp",templateId);
 const DeleteTemp = async (req, res) => {
   try {
     console.log("logee2duser",loggedInUserEmail);
-    const email = getLoggedInUserEmail();
+    const email = loggedInUserEmail;
     console.log("loge3eduser",loggedInUserEmail);
     const templateId = req.params.id;
 

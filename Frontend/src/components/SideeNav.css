@@ -11,7 +11,9 @@
   height: 100vh;
   /* ... */
 }
-
+.hamburger-icons{
+  display: none;
+}
 .sidenav-container.minimized {
   width: 50px;
 }
@@ -83,7 +85,12 @@
 
 
 @media (max-width: 768px) {
-  
+  .hamburger-icons {
+    color: white;
+    font-size: 20px;
+    margin: 10px;
+    cursor: pointer;
+  }
 
   .hamburger-icon {
     display: none;

@@ -110,11 +110,10 @@ const sendWelcomeEmail = async (email) => {
       if (accountStatus === 'active') {
         const hashedPassword = user.password;
   
-        console.log('Entered Password:', password);
-        console.log('Hashed Password from DB:', hashedPassword);
+    
         const isAdmin = user.is_admin;
         const query = { is_admin: { $eq: isAdmin } };
-        console.log('isAdmin:', isAdmin);
+       
   
         const isMatch = await bcrypt.compare(password.trim(), hashedPassword);
   
@@ -137,8 +136,8 @@ const sendWelcomeEmail = async (email) => {
             email: data2.email,
           });
           
-          console.log(data2.is_admin);
-          console.log('Logged in user inside first email:', loggedInUserEmail);
+       
+       
   
           await auditLog(data2.email, 'login');
         
@@ -231,7 +230,7 @@ const sendWelcomeEmail = async (email) => {
        const  getLoggedInUserEmail = () => {
         return loggedInUserEmail;
       };
-console.log('Logged in user outside email:', loggedInUserEmail);
+
 
       // const verifyMail = async (req, res) => {
       //   const token = req.query.token;
@@ -817,7 +816,7 @@ const newTemp = async (req, res) => {
     const audit = new Adminpowersaudit({ email, type:"creating", template_name: type,time:Date.now()});
     await audit.save();
 
-    console.log('Executing SQL Query:', audit);
+    
 
     // Insert the template record
     const template = new Template({ body, type });
@@ -835,14 +834,12 @@ const updateTemp = async (req, res) => {
   try {
     const { body, type ,templateId} = req.body;
     const email = loggedInUserEmail;
-    console.log("email",email);
    
-console.log("tempp",templateId);
     // Insert the audit record
     const audit = new Adminpowersaudit({ email, type: 'updating', template_name: type,time:Date.now() });
     await audit.save();
 
-    console.log('Executing SQL Query:', audit);
+   
     // Update the template record
    await  Template.findByIdAndUpdate(templateId, { body,type });
   
@@ -859,13 +856,12 @@ console.log("tempp",templateId);
 // DELETE request to delete a template
 const DeleteTemp = async (req, res) => {
   try {
-    console.log("logee2duser",loggedInUserEmail);
+   
     const email = loggedInUserEmail;
-    console.log("loge3eduser",loggedInUserEmail);
+    
     const templateId = req.params.id;
 
     const {  type } = req.body;
-console.log("tempp",type);
 
     // Insert the audit record
     //const audit = new Adminpowersaudit({ email, type: 'Deleting', template_name: type });
@@ -873,7 +869,7 @@ console.log("tempp",type);
 
     await audit.save();
 
-    console.log('Executing SQL Query:', audit);
+  
     // Delete the template record
     await Template.findByIdAndDelete(templateId);
 

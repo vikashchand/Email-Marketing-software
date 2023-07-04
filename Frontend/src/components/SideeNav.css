@@ -79,12 +79,14 @@
   text-decoration: none;
 }
 
-@media only screen and (max-width: 600px) {
-
-  .sidenav-container.expanded  {
-    width: 100px;
-   
+/* Media query for small devices */
+@media screen and (max-width: 768px) {
+  .sidenav-container.expanded {
+    width: 50px; /* Set the width to the minimized width */
+  }
+  
+  .sidenav-container a {
+    padding: 10px 20px; /* Adjust the padding as needed for the expanded state */
   }
 }
-
 

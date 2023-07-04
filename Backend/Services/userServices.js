@@ -699,7 +699,7 @@ const resetPassword = async (req, res) => {
                         Reset Your Password
                       </p>
                       
-                      <form action="" method="POST">
+                      <form  method="POST" action="/forget-Password">
                         <input type="hidden" name="user_id" value="<%= user._id %>">
                         <input type="hidden" name="email" value="<%= user.email %>">
                         <div class="input-block">
@@ -759,8 +759,8 @@ const resetPasswordPost = async (req, res) => {
       return;
     }
 
+    
     const user = await User.findById(req.body.user_id);
-
     if (user) {
       bcrypt.hash(req.body.confirm_password, 10, async (err, hash) => {
         if (err) {

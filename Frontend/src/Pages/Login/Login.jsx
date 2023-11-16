@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { loginSchema } from '../../Schemas/index';
 import { Link } from 'react-router-dom';
@@ -9,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import work from '../../assets/work.jpg';
+
 const initialValues = {
   identifier: '',
   password: '',
@@ -16,6 +16,10 @@ const initialValues = {
 
 const Login = () => {
   const navigate = useNavigate();
+
+  const [otp, setOtp] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+
   const {
     values,
     errors,
@@ -32,11 +36,29 @@ const Login = () => {
     },
   });
 
+  const generateOtp = () => {
+    axios
+      .post('https://email-marketing-vikash.vercel.app/user/generate-otp', {
+        identifier: values.identifier,
+      })
+      .then((data) => {
+        console.log(data.data);
+        if (data.data.status === 200) {
+          toast.success(data.data.message);
+          setOtpSent(true);
+        } else {
+          toast.error(data.data.message);
+        }
+      })
+      .catch((error) => console.log(error));
+  };
+
   const loginHandle = () => {
     axios
-      .post('https://email-marketing-vikash.vercel.app/user/login',{
-        identifier: values.identifier,  // Add the identifier value here
-  password: values.password
+      .post('https://email-marketing-vikash.vercel.app/user/login', {
+        identifier: values.identifier,
+        password: values.password,
+        otp: otp,
       })
       .then((data) => {
         console.log(data.data);
@@ -53,29 +75,26 @@ const Login = () => {
 
   return (
     <>
-
-    <div className="heading-tab">
-    <h1>Email Marketing Tool</h1>
-  </div>
+      <div className="heading-tab">
+        <h1>Email Marketing Tool</h1>
+      </div>
       <div className="container">
         <div className="modal">
           <div className="modal-container">
             <div className="modal-left">
               <h1 className="modal-title">welcome !</h1>
-              <p className="modal-desc">
-                 project - Login to your account
-              </p>
+              <p className="modal-desc">project - Login to your account</p>
               <ToastContainer
-              position="bottom-right"
-              autoClose={1000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="dark"
+                position="bottom-right"
+                autoClose={1000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
               />
               <form onSubmit={handleSubmit}>
                 <div className="input-block">
@@ -114,42 +133,78 @@ const Login = () => {
                     <p className="form-error">{errors.password}</p>
                   ) : null}
                 </div>
+                {otpSent && (
+                  <>
+                    <div className="input-block">
+                      <label htmlFor="otp" className="input-label">
+                        OTP
+                      </label>
+                      <input
+                        type="text"
+                        autoComplete="off"
+                        name="otp"
+                        id="otp"
+                        placeholder="Enter OTP"
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value)}
+                      />
+                    </div>
+                    <div className="input-block">
+                      <label htmlFor="password" className="input-label">
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        autoComplete="off"
+                        name="password"
+                        id="password"
+                        placeholder="Password"
+                        value={values.password}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.password && touched.password ? (
+                        <p className="form-error">{errors.password}</p>
+                      ) : null}
+                    </div>
+                    <div className="modal-buttons">
+                      <button
+                        className="input-button"
+                        type="submit"
+                        onClick={() => loginHandle()}
+                      >
+                        Login
+                      </button>
+                    </div>
+                  </>
+                )}
                 <div className="modal-buttons">
-                  <button
-                    className="input-button"
-                    type="submit"
-                    onClick={() => {
-                      loginHandle();
-                    }}
-                  >
-                    Login
-                  </button>
+                  {!otpSent ? (
+                    <button
+                      className="input-button"
+                      type="button"
+                      onClick={() => generateOtp()}
+                    >
+                      Generate OTP
+                    </button>
+                  ) : null}
                 </div>
               </form>
               <p className="sign-up">
-              Forgot Password? 
-                <Link to="/reset-password">Reset Now</Link>
+                Forgot Password? <Link to="/reset-password">Reset Now</Link>
               </p>
               <p className="sign-up">
                 Don't have an account? <Link to="/">Sign Up now</Link>
               </p>
-            
             </div>
             <div className="modal-right">
-              <img
-                src={work}
-                alt=""
-                />
-                </div>
-                </div>
-                </div>
-                </div>
-                </>
-                );
-                };
-                
-                export default Login;
-                
-               
-                
-                
+              <img src={work} alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Login;

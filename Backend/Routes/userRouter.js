@@ -3,6 +3,7 @@ const Router =express.Router();
 const userService=require('../Services/userServices');
 
 Router.post('/login',userService.userLogin);
+Router.post('/generate-otp',userService.generateOTP);
 Router.post('/register',userService.userSignup);
 Router.get('/userDetails',userService.usersList);
 Router.delete('/deleteuser/:id', userService.deleteUser);

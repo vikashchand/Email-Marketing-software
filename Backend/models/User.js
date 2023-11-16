@@ -46,7 +46,8 @@ const UserSchema = new mongoose.Schema({
   },
   deleted_at: {
     type: Date,
-  },
+  }
+ 
 });
 
 UserSchema.pre('save', async function (next) {

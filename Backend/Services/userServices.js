@@ -62,7 +62,110 @@ const sendWelcomeEmail = async (email) => {
   }
 };
 
-  
+
+
+const sendloginOtp = async (email,otp) => {
+  try {
+ // const htmlTemplate = fs.readFileSync('otp.html', 'utf8');
+  // Create a nodemailer transporter using your email service configuration
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    port: 465,
+    secure: true,
+    auth: {
+      user: SMTP_MAIL,
+      pass: SMTP_PASSWORD,
+    },
+    tls: {
+      rejectUnauthorized: false
+    }
+  });
+  // Prepare the email content
+ 
+  const mailOptions = {
+    from: SMTP_MAIL,
+    to: email,
+    subject: 'Login otp',
+    html: `<p>Hi,</p><p>Your login otp is .</p><p>${otp}</p>`
+  };
+   // Send the email
+   await transporter.sendMail(mailOptions);
+   console.log('login otp Email sent successfully!');
+  } catch (error) {
+    console.error('Error sending email:', error);
+    throw error;
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+let  otpStorage ; // Temporary storage for generated OTPs
+
+const generateOTP = async (req, res) => {
+  const { identifier } = req.body;
+
+  try {
+    const user = await User.findOne({
+      $or: [{ email: identifier }, { username: identifier }],
+    });
+
+    if (!user) {
+      return res.json({
+        status: 400,
+        message: 'User does not exist',
+      });
+    }
+
+    const accountStatus = user.account_status;
+
+    if (accountStatus === 'active') {
+      const otp = randomstring.generate({ length: 6, charset: 'numeric' });
+
+      // Assuming user's email is stored in the user object
+      const email = user.email;
+
+      // Send the OTP to the user's email using the sendWelcomeEmail function or a dedicated email function
+      sendloginOtp(email, otp);
+
+      // Store the generated OTP on the server for verification
+      otpStorage = otp;
+
+      // Return a success response or any other necessary action
+      return res.json({
+        status: 200,
+        message: 'OTP generated and sent successfully',
+      });
+    } else {
+      return res.json({
+        status: 400,
+        message: 'Account is not active',
+      });
+    }
+  } catch (error) {
+    console.error('Error generating OTP:', error);
+    return res.status(500).json({
+      status: 500,
+      message: 'Internal Server Error',
+    });
+  }
+};
+
 
 
   const auditLog = async (actor, type) => {
@@ -85,15 +188,10 @@ const sendWelcomeEmail = async (email) => {
   };
   
  
-  
-
-
-
   const userLogin = async (req, res) => {
-    const { identifier, password } = req.body;
+    const { identifier, password, otp } = req.body;
   
     try {
-      // Find the user by email or username
       const user = await User.findOne({
         $or: [{ email: identifier }, { username: identifier }],
       });
@@ -109,38 +207,51 @@ const sendWelcomeEmail = async (email) => {
   
       if (accountStatus === 'active') {
         const hashedPassword = user.password;
-  
-    
         const isAdmin = user.is_admin;
-        const query = { is_admin: { $eq: isAdmin } };
-       
   
         const isMatch = await bcrypt.compare(password.trim(), hashedPassword);
   
         if (isMatch) {
-          // Fetch additional user data if needed
-          const data2 = user.toJSON(); // Convert user object to JSON or extract required fields
+         
+            // Generate and send OTP if not already sent
+            //generateOTP(loggedInUserEmail);
   
-          const auth = jwt.sign({ data: data2 }, SECURITYKEY);
+            
+            // Verify the entered OTP
+            { 
+            const storedOTP = otpStorage;
+
+            console.log("stred",storedOTP);
+
   
-          user.last_login = new Date();
-          await user.save();
-          await sendWelcomeEmail(data2.email);
-          loggedInUserEmail = data2.email;
+            if (otp === storedOTP) {
+              // OTP is correct, proceed with login
+              const data2 = user.toJSON();
+              const auth = jwt.sign({ data: data2 }, SECURITYKEY);
   
+              user.last_login = new Date();
+              await user.save();
+              await sendWelcomeEmail(data2.email);
+              loggedInUserEmail = data2.email;
   
-          res.json({
-            status: 200,
-            message: 'Login success',
-            token: auth,
-            email: data2.email,
-          });
-          
-       
-       
+              res.json({
+                status: 200,
+                message: 'Login success',
+                token: auth,
+                email: data2.email,
+              });
   
-          await auditLog(data2.email, 'login');
-        
+              await auditLog(data2.email, 'login');
+            } else {
+              res.json({
+                status: 400,
+                message: 'Invalid OTP. Please try again.',
+              });
+            }
+  
+            // Clear the stored OTP
+            delete otpStorage[loggedInUserEmail];
+          }
         } else {
           res.json({
             status: 400,
@@ -922,6 +1033,6 @@ const customers = async (req, res) => {
         
         
         userSignup, getLoggedInUserEmail ,verifyMail,deleteUser,usersList,customerList,updateUserAccountStatus,updatecustomerStatus
-        ,fetchTemp,newTemp,updateTemp,DeleteTemp,audit,adminpowersaudit,customers
+        ,fetchTemp,newTemp,updateTemp,DeleteTemp,audit,adminpowersaudit,customers,generateOTP
       
       };

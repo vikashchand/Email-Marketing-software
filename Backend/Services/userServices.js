@@ -141,7 +141,7 @@ const generateOTP = async (req, res) => {
       const email = user.email;
 
       // Send the OTP to the user's email using the sendWelcomeEmail function or a dedicated email function
-      sendloginOtp(email, otp);
+      await sendloginOtp(email, otp);
 
       // Store the generated OTP on the server for verification
       otpStorage = otp;

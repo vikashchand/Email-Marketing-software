@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { useFormik } from "formik";
 import { signUpSchema } from "../../Schemas";
 import { Link } from 'react-router-dom';
@@ -8,6 +8,9 @@ import './Registration.css'
 import axios from 'axios';
 import work from '../../assets/work.jpg';
 
+
+
+
 const initialValues = {
     username: "",
     email: "",
@@ -15,7 +18,14 @@ const initialValues = {
     confirm_password: "",
   };
 
+  
+
+
+
 const Registration = () => {
+
+  const [showPassword, setShowPassword] = useState(false);
+
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues,
@@ -109,11 +119,11 @@ const Registration = () => {
                 <p className="form-error">{errors.email}</p>
               ) : null}
               <div className="input-block">
-                <label htmlFor="password" className="input-label">
-                  Password
-                </label>
-                <input
-                  type="password"
+                  <label htmlFor="password" className="input-label"  onClick={() => setShowPassword(!showPassword)}>
+                    Password  👁️
+                  </label>
+                  <input
+                  type={showPassword ? 'text' : 'password'}
                   autoComplete="off"
                   name="password"
                   id="password"

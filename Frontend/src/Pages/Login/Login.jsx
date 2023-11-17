@@ -19,6 +19,7 @@ const Login = () => {
 
   const [otp, setOtp] = useState('');
   const [otpSent, setOtpSent] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     values,
@@ -116,11 +117,11 @@ const Login = () => {
                   ) : null}
                 </div>
                 <div className="input-block">
-                  <label htmlFor="password" className="input-label">
-                    Password
+                  <label htmlFor="password" className="input-label"  onClick={() => setShowPassword(!showPassword)}>
+                    Password  👁️
                   </label>
                   <input
-                    type="password"
+                  type={showPassword ? 'text' : 'password'}
                     autoComplete="off"
                     name="password"
                     id="password"

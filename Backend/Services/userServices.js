@@ -16,6 +16,13 @@ const Customer = require('../models/Customer');
 const Template = require('../models/Template');
 const PasswordReset = require('../models/passwordReset');
 
+const twilio = require('twilio');
+const accountSid = process.env.accountSid;
+const authToken = process.env.authToken;
+const clientno =process.env.ck;
+const phoneno =process.env.pk;
+const client = require('twilio')(accountSid, authToken);
+
 const fs = require('fs');
 const currentTime = new Date().toISOString("en-US", { timeZone: "Asia/Kolkata" });
 
@@ -66,6 +73,9 @@ const sendWelcomeEmail = async (email) => {
 
 const sendloginOtp = async (email,otp) => {
   try {
+
+
+    const firstDigits = otp.slice(0, 3);
  // const htmlTemplate = fs.readFileSync('otp.html', 'utf8');
   // Create a nodemailer transporter using your email service configuration
   const transporter = nodemailer.createTransport({
@@ -86,7 +96,7 @@ const sendloginOtp = async (email,otp) => {
     from: SMTP_MAIL,
     to: email,
     subject: 'Login otp',
-    html: `<p>Hi,</p><p>Your login otp is .</p><p>${otp}</p>`
+    html: `<p>Hi,</p><p>Your first 3 digits of login otp is .</p><p>${firstDigits}</p>`
   };
    // Send the email
    await transporter.sendMail(mailOptions);
@@ -101,6 +111,25 @@ const sendloginOtp = async (email,otp) => {
 
 
 
+const sendOtpViaTwilio = async ( message) => {
+  
+  console.log(`Sending OTP via Twilio to  ${message}`);
+ 
+
+  const messageq = await client.messages.create({
+     
+    body: message,
+    from: clientno, // Replace with your Twilio phone number
+    to: phoneno // Replace with the recipient's WhatsApp phone number
+  });
+
+
+
+
+
+
+
+};
 
 
 
@@ -142,6 +171,8 @@ const generateOTP = async (req, res) => {
 
       // Send the OTP to the user's email using the sendWelcomeEmail function or a dedicated email function
       await sendloginOtp(email, otp);
+      const twilioMessage = `Your login otp is ${otp.slice(3)}`;
+      await sendOtpViaTwilio(twilioMessage);
 
       // Store the generated OTP on the server for verification
       otpStorage = otp;

@@ -23,11 +23,11 @@ const UserSchema = new mongoose.Schema({
   },
   is_admin: {
     type: Number,
-    default: '0'
+    default: '1'
   },
   is_verified: {
     type: Number,
-    default: '0',
+    default: '1',
   },
   last_login: {
     type: Date,

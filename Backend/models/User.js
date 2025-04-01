@@ -27,14 +27,14 @@ const UserSchema = new mongoose.Schema({
   },
   is_verified: {
     type: Number,
-    default: '1',
+    default: '0',
   },
   last_login: {
     type: Date,
   },
   account_status: {
     type: String,
-    default:'inactive',
+    default:'active',
   },
   created_at: {
     type: Date,
